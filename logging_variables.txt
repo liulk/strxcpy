@@ -1,0 +1,15 @@
+name
+levelno
+levelname
+pathname
+filename
+funcName
+lineno
+created
+relativeCreated
+asctime
+msecs
+thread
+threadName
+process
+message
