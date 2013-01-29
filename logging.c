@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define _POSIX_SOURCE   /* fdopen() */
+
 #include "logging.h"
 
 #include <math.h>       /* modf() */

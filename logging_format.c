@@ -51,7 +51,7 @@ logging_append_info(char *dest, const char *dest_end,
     if (strncmp(key, "lineno", key_len) == 0)
       dest = sxprintf(dest, dest_end, "%d", rec_p->lineno);
     else if (strncmp(key, "thread", key_len) == 0)
-      dest = sxprintf(dest, dest_end, "%u", rec_p->thread);
+      dest = sxprintf(dest, dest_end, "%lu", rec_p->thread);
     break;
 
   case 7:
