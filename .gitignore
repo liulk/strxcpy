@@ -1,0 +1,4 @@
+*.o
+
+logging_test
+strxcpy.a
