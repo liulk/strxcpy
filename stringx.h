@@ -1,5 +1,5 @@
 /* String buffer operations.
- * Copyright (C) 2009, 2010  Likai Liu <liulk@cs.bu.edu>
+ * Copyright (C) 2009--2013  Likai Liu <liulk@cs.bu.edu>
  *
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -34,20 +34,62 @@
 #include <stdarg.h>     /* va_list */
 #include <stddef.h>     /* size_t */
 
+#if !__GNUC__ && !defined(__attribute__)
+#define __attribute__(x)
+#endif
+
+#if !_MSC_VER && !defined(__printf_format_string)
+#define __printf_format_string
+#endif
+
 /* Copies/appends a string from src to the string buffer denoted by
  * dest and dest_end.  The function copies at most n characters, until
  * the end of src, or until the string buffer is full, whichever
  * occurs the earliest.
  */
-char *strxcpy(char *dest, const char *dest_end, const char *src, size_t n);
+extern char *strxcpy(
+    char *dest, const char *dest_end,
+    const char *src, size_t n);
+
+/* Converts an unsigned long long to a string buffer, using a given
+ * base and a given string of digits to use.
+ */
+extern char *strxfromull(
+    char *dest, const char *dest_end,
+    unsigned long long int x, int base, const char *digits);
 
 /* Formats a string into the string buffer, truncated to the capacity
  * of the buffer.  The vsxprintf() variant takes an argument pointer,
  * and the sxprintf variant is a variadic function that takes any
  * number of arguments on stack.
+ *
+ * These functions do not allocate memory; instead, all operations are
+ * performed on stack.  The format specification implemented by these
+ * functions may be incomplete.
  */
-char *vsxprintf(char *dest, const char *dest_end, const char *fmt, va_list ap);
-char *sxprintf(char *dest, const char *dest_end, const char *fmt, ...);
+extern char *vsxprintf(
+    char *dest, const char *dest_end,
+    __printf_format_string const char *fmt, va_list ap)
+  __attribute__(( format(printf, 3, 0) ));
+
+extern char *sxprintf(
+    char *dest, const char *dest_end,
+    __printf_format_string const char *fmt, ...)
+  __attribute__(( format(printf, 3, 4) ));
+
+/* Formats a string into a string buffer, leveraging Standard C
+ * library's vsnprintf() but used in the safe way.  These generally
+ * provide better formatting capabilities but may allocate memory.
+ */
+extern char *vsnxprintf(
+    char *dest, const char *dest_end,
+    __printf_format_string const char *fmt, va_list ap)
+  __attribute__(( format(printf, 3, 0) ));
+
+extern char *snxprintf(
+    char *dest, const char *dest_end,
+    __printf_format_string const char *fmt, ...)
+  __attribute__(( format(printf, 3, 4) ));
 
 /* TODO(liulk): make wcs* variants available too. */
 
